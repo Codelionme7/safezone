@@ -7,7 +7,6 @@ import {
   Sparkles,
   ArrowRight,
   Clock,
-  Github,
   Lock,
   Radio,
   Map as MapIcon,
@@ -203,15 +202,7 @@ export default function Home() {
             <Logo />
             <span>SafeZone — MVP preview</span>
           </div>
-          <div className="flex items-center gap-5">
-            <a
-              href="https://github.com"
-              className="inline-flex items-center gap-1.5 hover:text-white transition-colors"
-            >
-              <Github className="h-4 w-4" /> Source
-            </a>
-            <span>Built for community feedback</span>
-          </div>
+          <span>Built for community feedback</span>
         </div>
       </footer>
     </main>
