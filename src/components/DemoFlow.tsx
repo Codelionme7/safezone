@@ -244,7 +244,7 @@ function Signup({
 }) {
   const valid = phone.trim().length >= 9;
   return (
-    <div className="grid md:grid-cols-2 gap-12 items-center">
+    <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
       <div>
         <SectionTitle
           eyebrow="Step 1 · As the parent"
@@ -312,7 +312,7 @@ function Verify({
 }) {
   const valid = otp.length === 6;
   return (
-    <div className="grid md:grid-cols-2 gap-12 items-center">
+    <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
       <div>
         <SectionTitle
           eyebrow="Step 2 · As the parent"
@@ -574,7 +574,7 @@ function Trigger({
   onTrigger: () => void;
 }) {
   return (
-    <div className="grid md:grid-cols-2 gap-12 items-center">
+    <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
       <div>
         <SectionTitle
           eyebrow="Step 4 · The emergency"

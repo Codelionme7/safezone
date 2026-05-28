@@ -10,24 +10,25 @@ export function DemoChrome({ children, step, total }: { children: ReactNode; ste
       <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
       <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[480px] w-[800px] rounded-full bg-brand-600/15 blur-[160px] pointer-events-none" />
 
-      <header className="relative max-w-4xl mx-auto px-6 pt-6 flex items-center justify-between">
-        <Link href="/" className="inline-flex items-center gap-2 text-sm text-ink-300 hover:text-white transition-colors">
+      <header className="relative max-w-4xl mx-auto px-4 sm:px-6 pt-5 sm:pt-6 flex items-center justify-between gap-3">
+        <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-ink-300 hover:text-white transition-colors shrink-0">
           <ArrowLeft className="h-4 w-4" />
-          Back to site
+          <span className="sm:hidden">Back</span>
+          <span className="hidden sm:inline">Back to site</span>
         </Link>
-        <div className="inline-flex items-center gap-2 text-sm text-ink-300">
+        <div className="hidden sm:inline-flex items-center gap-2 text-sm text-ink-300">
           <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-brand-500/15 ring-1 ring-brand-500/30">
             <Bell className="h-3.5 w-3.5 text-brand-300" />
           </span>
           <span className="font-medium text-white">SafeZone</span>
           <span className="text-ink-500">/ demo</span>
         </div>
-        <div className="text-xs text-ink-400 font-mono">
+        <div className="text-xs text-ink-400 font-mono shrink-0">
           Step {step} of {total}
         </div>
       </header>
 
-      <div className="relative max-w-4xl mx-auto px-6 pt-3">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 pt-3">
         <div className="h-1 w-full rounded-full bg-white/5 overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-brand-500 to-brand-300 transition-all duration-500"
@@ -36,7 +37,7 @@ export function DemoChrome({ children, step, total }: { children: ReactNode; ste
         </div>
       </div>
 
-      <main className="relative max-w-4xl mx-auto px-6 py-10 animate-fade-in">{children}</main>
+      <main className="relative max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10 animate-fade-in">{children}</main>
     </div>
   );
 }

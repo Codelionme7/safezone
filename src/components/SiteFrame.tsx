@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Bell } from "lucide-react";
+import { MobileNav } from "./MobileNav";
 
 export function Logo() {
   return (
@@ -28,12 +29,15 @@ export function SiteNav() {
           Privacy
         </Link>
       </div>
-      <Link
-        href="/demo"
-        className="text-sm rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 px-3.5 py-2 transition-colors"
-      >
-        Try demo →
-      </Link>
+      <div className="flex items-center gap-2">
+        <Link
+          href="/demo"
+          className="hidden md:inline-flex text-sm rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 px-3.5 py-2 transition-colors"
+        >
+          Try demo →
+        </Link>
+        <MobileNav />
+      </div>
     </nav>
   );
 }

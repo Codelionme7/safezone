@@ -12,6 +12,7 @@ import {
   Map as MapIcon,
 } from "lucide-react";
 import { SiteFooter } from "@/components/SiteFrame";
+import { MobileNav } from "@/components/MobileNav";
 
 export default function Home() {
   return (
@@ -21,15 +22,15 @@ export default function Home() {
 
       <Nav />
 
-      <section className="relative max-w-6xl mx-auto px-6 pt-20 pb-28">
+      <section className="relative max-w-6xl mx-auto px-6 pt-14 sm:pt-20 pb-20 sm:pb-28">
         <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-brand-300 mb-6">
           <span className="h-2 w-2 rounded-full bg-brand-400 animate-pulse" />
           MVP preview · feedback wanted
         </div>
-        <h1 className="text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] max-w-4xl">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-semibold tracking-tight leading-[1.08] sm:leading-[1.05] max-w-4xl text-balance">
           When seconds matter, your <span className="text-brand-400">whole street</span> shows up.
         </h1>
-        <p className="mt-6 text-lg md:text-xl text-ink-300 max-w-2xl leading-relaxed">
+        <p className="mt-6 text-base sm:text-lg md:text-xl text-ink-300 max-w-2xl leading-relaxed">
           SafeZone turns a missing-child crisis into a coordinated community
           response. Instant geo-fenced alerts. Volunteers assigned to non-overlapping
           search zones. AI-matched sightings sent straight to the nearest police
@@ -231,12 +232,15 @@ function Nav() {
           Stack
         </a>
       </div>
-      <Link
-        href="/demo"
-        className="text-sm rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 px-3.5 py-2 transition-colors"
-      >
-        Try demo →
-      </Link>
+      <div className="flex items-center gap-2">
+        <Link
+          href="/demo"
+          className="hidden md:inline-flex text-sm rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 px-3.5 py-2 transition-colors"
+        >
+          Try demo →
+        </Link>
+        <MobileNav />
+      </div>
     </nav>
   );
 }

@@ -481,3 +481,63 @@ keep iterating on these.)
 6. Approve the color palette so I can ship the V2 refresh
 
 Reply with answers to §8 and I'll start the Day 1–2 work.
+
+---
+
+## 11. Session 2 log — shipped + action points
+
+Everything below is **live on the demo** (https://safezone-amber-one.vercel.app)
+and built client-side (still no backend/keys required).
+
+### ✅ Shipped this session
+
+1. **Trust-forward visual identity** — color psychology applied:
+   green = trust/safety (CTAs), red = emergency only (alert trigger + radius),
+   blue = institutional. No gold. Fonts: Manrope (display) + Inter (body) +
+   JetBrains Mono (numbers).
+2. **Volunteer sign-up page** (`/volunteer`) — languages spoken, response
+   areas, NGO affiliation, code-of-conduct gate, "partner with us" callout.
+3. **Trust pages** — `/privacy`, `/disclaimer`, `/safeguarding` + an AI
+   disclaimer banner on the match result.
+4. **Child photo upload** in the parent report flow + a mock "AI photo
+   analysis" panel. Photo follows the case: shown to volunteers in the
+   broadcast, as a reference while reporting a sighting, and on the match
+   screen. Policy encoded in copy: photo visible to verified volunteers
+   only during an active alert, removed on resolution.
+5. **Real Google Maps** in the alert broadcast + trigger steps. Keyless
+   embed works out of the box; upgrades to the official Maps Embed API if
+   `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` is set in Vercel.
+6. **Mobile responsiveness pass** — mobile nav menu (closes on tap),
+   responsive demo header, fluid hero/section sizing, proper viewport
+   config. Tooling: Tailwind CSS (mobile-first) — no new dependency needed.
+
+### 🧠 Facial-recognition decision (recorded)
+
+- **Core sighting-vs-photo match → AWS Rekognition** (fastest, 12-mo free
+  tier) **or self-hosted InsightFace/DeepFace** (child photos never leave
+  our servers — strong NGO/government trust pitch). Pick based on whether
+  data sovereignty is part of the pitch.
+- **PimEyes → NOT for the MVP.** It's a web-wide reverse-face *search*
+  engine, not a 1:1 matcher; it carries serious legal/ethical/reputational
+  risk for processing children's faces (Kenya DPA, GDPR precedent). Park it
+  as a **future, partner-only (police), legally-reviewed trafficking
+  web-search module** (V3+), where its strength genuinely applies.
+- Always keep the disclaimer: AI is assistive only, weaker on African
+  faces, a human confirms identity.
+
+### 📋 Open action points (next sessions, priority order)
+
+- [ ] **Language switcher** (i18n) — collaborator's #1 ask. EN/SW + Kikuyu,
+      Luo, Luhya, Maa, Somali. `next-intl`.
+- [ ] **Mock face-match demo step** — volunteer uploads a sighting photo →
+      side-by-side with child's photo → simulated match % + bias disclaimer.
+- [ ] **Interactive map upgrade** — Maps JavaScript API (billing key) to
+      draw the 2 km radius circle + search-zone polygons on the real map.
+- [ ] **Backend** — Supabase (DB + phone-OTP auth), convert mocks to real
+      Next.js API routes. Wire real Gemini for sighting text matching.
+- [ ] **Real notifications** — WhatsApp Business + Africa's Talking SMS +
+      Firebase push, with fallback chain.
+- [ ] **Dashboards** — parent / volunteer / NGO-admin (with volunteer
+      verification gate).
+- [ ] **Decisions still needed from you (§8):** collaborator's GitHub
+      handle, domain name, first NGO contact, light-mode now or later.
