@@ -255,12 +255,12 @@ function Signup({
           <label className="block">
             <span className="text-xs uppercase tracking-widest text-ink-400">Phone number</span>
             <div className="mt-1 flex rounded-xl ring-1 ring-white/10 bg-white/[0.02] focus-within:ring-brand-500/40 overflow-hidden">
-              <span className="px-3 py-3 text-ink-400 text-sm bg-white/[0.03]">+256</span>
+              <span className="px-3 py-3 text-ink-400 text-sm bg-white/[0.03]">+254</span>
               <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                placeholder="700 000 000"
+                placeholder="712 345 678"
                 className="flex-1 bg-transparent px-3 py-3 text-white placeholder:text-ink-500 outline-none"
               />
             </div>
@@ -279,7 +279,7 @@ function Signup({
           </p>
           <div className="rounded-xl ring-1 ring-white/10 px-3 py-2.5 flex items-center gap-2 text-sm">
             <PhoneIcon className="h-4 w-4 text-ink-400" />
-            <span className="text-ink-300">+256 {phone || "···"}</span>
+            <span className="text-ink-300">+254 {phone || "···"}</span>
           </div>
           <button
             disabled={!valid}
@@ -347,7 +347,7 @@ function Verify({
           </span>
           <div className="text-white font-semibold">Check your messages</div>
           <p className="text-xs text-ink-400 leading-relaxed">
-            We sent a code to +256 {phone || "···"}
+            We sent a code to +254 {phone || "···"}
           </p>
           <div className="mt-3 mx-auto rounded-lg bg-white/[0.03] ring-1 ring-white/5 px-3 py-2 text-xs text-ink-300 max-w-[220px]">
             SafeZone: <span className="font-mono">874 219</span> — never share this.
