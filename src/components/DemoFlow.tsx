@@ -581,13 +581,17 @@ function Trigger({
           title="Something's wrong. Trigger the alert."
           body="One tap fires a high-priority push to every verified neighbour within 2 km, notifies the nearest police stations, and starts the search-zone assigner."
         />
-        <div className="rounded-2xl ring-1 ring-white/10 bg-white/[0.02] p-5 mb-6 flex items-center gap-4">
+        <div className="rounded-2xl ring-1 ring-white/10 bg-white/[0.02] p-5 mb-4 flex items-center gap-4">
           <ChildPhoto photo={child.photo} size="lg" />
           <div>
             <div className="text-xs uppercase tracking-widest text-ink-400 mb-1">Alerting about</div>
             <div className="text-xl font-semibold text-white">{child.name}, {child.age}</div>
             <div className="text-sm text-ink-300 mt-1">Last seen: {child.lastSeenLocation}</div>
           </div>
+        </div>
+
+        <div className="rounded-2xl ring-1 ring-white/10 bg-white/[0.02] overflow-hidden mb-6">
+          <AlertMap child={child} heightClass="h-48" />
         </div>
         <button
           onClick={onTrigger}
@@ -659,7 +663,7 @@ function Broadcast({
 
       <div className="grid md:grid-cols-5 gap-6">
         <div className="md:col-span-3 rounded-2xl ring-1 ring-white/10 bg-white/[0.02] overflow-hidden">
-          <MapMock child={child} />
+          <AlertMap child={child} />
         </div>
         <div className="md:col-span-2 space-y-3">
           <BroadcastFeed />
@@ -667,6 +671,48 @@ function Broadcast({
             See volunteer view <ArrowRight className="h-4 w-4" />
           </PrimaryButton>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function AlertMap({
+  child,
+  heightClass = "h-[360px]",
+}: {
+  child: ChildProfile;
+  heightClass?: string;
+}) {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  const query = child.lastSeenLocation?.trim();
+
+  // No location yet → fall back to the illustrative mock map.
+  if (!query) return <MapMock child={child} />;
+
+  const q = encodeURIComponent(query);
+  // With an official key, use the Maps Embed API; otherwise the free keyless
+  // Google embed (works out of the box, no billing).
+  const src = apiKey
+    ? `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=${q}&zoom=15`
+    : `https://maps.google.com/maps?q=${q}&z=15&output=embed`;
+
+  return (
+    <div className={`relative ${heightClass}`}>
+      <iframe
+        title={`Last seen: ${query}`}
+        src={src}
+        className="absolute inset-0 h-full w-full"
+        style={{ border: 0 }}
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        allowFullScreen
+      />
+      <div className="pointer-events-none absolute top-3 left-3 inline-flex items-center gap-1.5 text-[10px] font-medium text-white bg-alert-500/85 backdrop-blur px-2 py-1 rounded ring-1 ring-white/20">
+        <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />
+        Last seen — live map
+      </div>
+      <div className="pointer-events-none absolute bottom-3 left-3 max-w-[85%] truncate text-[10px] text-white/90 bg-ink-950/70 backdrop-blur px-2 py-1 rounded ring-1 ring-white/10">
+        {query} · ~2 km alert radius
       </div>
     </div>
   );
