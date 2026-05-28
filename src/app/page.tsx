@@ -11,6 +11,7 @@ import {
   Radio,
   Map as MapIcon,
 } from "lucide-react";
+import { SiteFooter } from "@/components/SiteFrame";
 
 export default function Home() {
   return (
@@ -186,25 +187,25 @@ export default function Home() {
             Walk through a full missing-child alert in under 60 seconds. Tell us what
             you'd change.
           </p>
-          <Link
-            href="/demo"
-            className="mt-8 inline-flex items-center gap-2 rounded-xl bg-brand-500 hover:bg-brand-400 transition-colors px-6 py-3.5 font-medium text-white glow"
-          >
-            Start the demo
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link
+              href="/demo"
+              className="inline-flex items-center gap-2 rounded-xl bg-brand-500 hover:bg-brand-400 transition-colors px-6 py-3.5 font-medium text-white glow"
+            >
+              Start the demo
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/volunteer"
+              className="inline-flex items-center gap-2 rounded-xl bg-white/5 hover:bg-white/10 ring-1 ring-white/10 transition-colors px-6 py-3.5 font-medium text-white"
+            >
+              Become a volunteer
+            </Link>
+          </div>
         </div>
       </section>
 
-      <footer className="border-t border-white/5 py-10">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-ink-400">
-          <div className="flex items-center gap-2">
-            <Logo />
-            <span>SafeZone — MVP preview</span>
-          </div>
-          <span>Built for community feedback</span>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
@@ -220,6 +221,9 @@ function Nav() {
         <a href="#how" className="hover:text-white transition-colors">
           How it works
         </a>
+        <Link href="/volunteer" className="hover:text-white transition-colors">
+          Volunteer
+        </Link>
         <a href="#trust" className="hover:text-white transition-colors">
           Privacy
         </a>

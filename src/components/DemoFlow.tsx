@@ -14,6 +14,7 @@ import {
   Users,
   Home,
   RotateCcw,
+  AlertTriangle,
 } from "lucide-react";
 import { mockMatch, AiMatchResult } from "@/lib/mockAiMatcher";
 import {
@@ -458,7 +459,7 @@ function Trigger({
         </div>
         <button
           onClick={onTrigger}
-          className="group w-full md:w-auto inline-flex items-center justify-center gap-3 rounded-xl bg-brand-500 hover:bg-brand-400 text-white px-7 py-4 font-semibold text-lg transition-colors glow"
+          className="group w-full md:w-auto inline-flex items-center justify-center gap-3 rounded-xl bg-alert-500 hover:bg-alert-400 text-white px-7 py-4 font-semibold text-lg transition-colors glow-alert"
         >
           <Bell className="h-5 w-5 group-hover:animate-bounce" />
           Trigger missing-child alert
@@ -470,15 +471,15 @@ function Trigger({
 
       <Phone title="Trigger alert">
         <div className="space-y-4 py-3">
-          <div className="rounded-xl bg-brand-500/10 ring-1 ring-brand-500/30 px-3 py-3">
-            <div className="text-[10px] uppercase tracking-widest text-brand-300">High priority</div>
+          <div className="rounded-xl bg-alert-500/10 ring-1 ring-alert-500/30 px-3 py-3">
+            <div className="text-[10px] uppercase tracking-widest text-alert-300">High priority</div>
             <div className="mt-1 text-sm text-white font-medium">
               You're about to broadcast {child.name}'s details to ~{Math.floor(40 + Math.random() * 30)} verified neighbours and 3 police stations.
             </div>
           </div>
           <button
             onClick={onTrigger}
-            className="w-full rounded-xl bg-brand-500 text-white py-3 font-semibold text-sm"
+            className="w-full rounded-xl bg-alert-500 text-white py-3 font-semibold text-sm"
           >
             Send alert now
           </button>
@@ -550,12 +551,12 @@ function MapMock({ child }: { child: ChildProfile }) {
       {/* alert radius */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
         <div className="relative">
-          <div className="h-56 w-56 rounded-full ring-2 ring-brand-500/40 bg-brand-500/5" />
-          <div className="absolute inset-0 rounded-full ring-2 ring-brand-500/30 animate-pulse-ring" />
-          <div className="absolute inset-0 rounded-full ring-2 ring-brand-500/20 animate-pulse-ring" style={{ animationDelay: "0.8s" }} />
+          <div className="h-56 w-56 rounded-full ring-2 ring-alert-500/40 bg-alert-500/5" />
+          <div className="absolute inset-0 rounded-full ring-2 ring-alert-500/30 animate-pulse-ring" />
+          <div className="absolute inset-0 rounded-full ring-2 ring-alert-500/20 animate-pulse-ring" style={{ animationDelay: "0.8s" }} />
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-            <MapPin className="h-6 w-6 text-brand-300 drop-shadow-[0_0_8px_rgba(246,73,43,0.8)]" />
-            <span className="mt-1 text-[10px] text-white bg-brand-500/30 backdrop-blur px-2 py-0.5 rounded-md ring-1 ring-brand-500/40 whitespace-nowrap max-w-[160px] truncate">
+            <MapPin className="h-6 w-6 text-alert-300 drop-shadow-[0_0_8px_rgba(240,68,56,0.8)]" />
+            <span className="mt-1 text-[10px] text-white bg-alert-500/30 backdrop-blur px-2 py-0.5 rounded-md ring-1 ring-alert-500/40 whitespace-nowrap max-w-[160px] truncate">
               {child.lastSeenLocation}
             </span>
           </div>
@@ -835,6 +836,16 @@ function Match({
             )}
           </div>
         </div>
+      </div>
+
+      <div className="mt-5 rounded-xl ring-1 ring-amber-400/25 bg-amber-400/[0.06] px-4 py-3 flex gap-3 items-start">
+        <AlertTriangle className="h-4 w-4 text-amber-300 mt-0.5 shrink-0" />
+        <p className="text-xs text-amber-100/90 leading-relaxed">
+          <span className="font-semibold">AI is assistive only.</span> This score is a signal, not a
+          decision. Police make the final identification. Never approach a child based on an AI match
+          alone — report and let the authorities handle recovery. Face- and text-matching can be less
+          accurate for African faces and local languages; treat low and high scores with care.
+        </p>
       </div>
 
       <div className="mt-8 flex gap-3">
