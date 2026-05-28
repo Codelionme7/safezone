@@ -15,6 +15,11 @@ import {
   Home,
   RotateCcw,
   AlertTriangle,
+  Camera,
+  X,
+  ScanFace,
+  ImagePlus,
+  UserRound,
 } from "lucide-react";
 import { mockMatch, AiMatchResult } from "@/lib/mockAiMatcher";
 import {
@@ -59,6 +64,7 @@ type ChildProfile = {
   description: string;
   clothing: string;
   lastSeenLocation: string;
+  photo: string | null;
 };
 
 export default function DemoFlow() {
@@ -71,6 +77,7 @@ export default function DemoFlow() {
     description: "short curly black hair, brown eyes, small scar on left cheek",
     clothing: "yellow t-shirt with a giraffe, blue denim shorts, white sneakers",
     lastSeenLocation: "Makindye market, near the fruit stalls",
+    photo: null,
   });
   const [sighting, setSighting] = useState(
     "Just saw a little girl about 7 walking alone near the bus stop on Salaama Road. Yellow shirt with what looked like a giraffe on it, denim shorts. Brown skin, curly hair.",
@@ -149,6 +156,7 @@ export default function DemoFlow() {
 
       {step === "sighting" && (
         <SightingStep
+          child={child}
           sighting={sighting}
           setSighting={setSighting}
           matching={matching}
@@ -161,6 +169,7 @@ export default function DemoFlow() {
 
       {step === "match" && (
         <Match
+          child={child}
           result={matchResult}
           matching={matching}
           onNext={() => go("resolved")}
@@ -358,13 +367,69 @@ function ChildSetup({
   setChild: (c: ChildProfile) => void;
   onNext: () => void;
 }) {
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setChild({ ...child, photo: reader.result as string });
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  }
+
   return (
     <div>
       <SectionTitle
         eyebrow="Step 3 · As the parent"
         title="Add your child's profile."
-        body="Profiles stay private until you trigger an alert. Photos never leave your device — only a perceptual hash is stored. You can edit any field below to see how the AI matcher responds later."
+        body="Add a recent, clear photo and a few details. During an active alert the photo is shown to verified volunteers nearby and used by AI to match sightings — then it's removed once your child is found."
       />
+
+      {/* Photo upload + AI analysis */}
+      <div className="mb-6 rounded-2xl ring-1 ring-white/10 bg-white/[0.02] p-5">
+        <div className="flex flex-col sm:flex-row gap-5">
+          <div className="shrink-0">
+            {child.photo ? (
+              <div className="relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={child.photo}
+                  alt="Uploaded child"
+                  className="h-40 w-40 rounded-2xl object-cover ring-1 ring-white/10"
+                />
+                <button
+                  onClick={() => setChild({ ...child, photo: null })}
+                  className="absolute -top-2 -right-2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-ink-900 ring-1 ring-white/15 text-ink-300 hover:text-white transition-colors"
+                  aria-label="Remove photo"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            ) : (
+              <label className="flex h-40 w-40 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-white/15 bg-white/[0.02] text-ink-400 hover:border-brand-500/40 hover:text-brand-300 transition-colors text-center px-3">
+                <Camera className="h-7 w-7" />
+                <span className="text-xs">Tap to add a photo</span>
+                <input type="file" accept="image/*" onChange={handleFile} className="hidden" />
+              </label>
+            )}
+          </div>
+
+          <div className="flex-1">
+            {child.photo ? (
+              <AiPhotoAnalysis child={child} onReplace={handleFile} />
+            ) : (
+              <div className="text-sm text-ink-400 leading-relaxed">
+                <div className="flex items-center gap-2 text-ink-200 font-medium mb-2">
+                  <ScanFace className="h-4 w-4 text-brand-300" />
+                  Why a photo matters
+                </div>
+                A clear, recent photo is the single most useful thing a volunteer can have. SafeZone
+                also runs it through AI to help match incoming sightings. JPG or PNG, with the face
+                clearly visible.
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
       <div className="grid md:grid-cols-2 gap-5">
         <Field label="Child's first name">
@@ -437,6 +502,70 @@ function Field({
   );
 }
 
+function AiPhotoAnalysis({
+  child,
+  onReplace,
+}: {
+  child: ChildProfile;
+  onReplace: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <div>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-brand-500/10 ring-1 ring-brand-500/30 text-brand-300">
+          <ScanFace className="h-4 w-4" />
+        </span>
+        <div className="text-sm font-medium text-white">AI photo analysis</div>
+        <span className="ml-auto inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-emerald-300">
+          <CheckCircle2 className="h-3 w-3" /> Ready
+        </span>
+      </div>
+      <div className="grid grid-cols-2 gap-2 text-xs">
+        <AnalysisChip label="Face detected" value="1 subject" />
+        <AnalysisChip label="Image quality" value="Good" />
+        <AnalysisChip label="Est. age range" value={`${Math.max(1, child.age - 1)}–${child.age + 1} yrs`} />
+        <AnalysisChip label="Ready for matching" value="Yes" />
+      </div>
+      <p className="mt-3 text-[11px] text-ink-400 leading-relaxed">
+        When an alert is active, this photo is compared against sighting photos volunteers submit.
+        <span className="text-amber-200/80">
+          {" "}
+          AI is assistive only and can be less accurate for African faces — a person, never the
+          algorithm, confirms identity.
+        </span>
+      </p>
+      <label className="mt-3 inline-flex items-center gap-1.5 text-xs text-brand-300 hover:text-brand-200 cursor-pointer">
+        <ImagePlus className="h-3.5 w-3.5" /> Replace photo
+        <input type="file" accept="image/*" onChange={onReplace} className="hidden" />
+      </label>
+    </div>
+  );
+}
+
+function AnalysisChip({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg bg-white/[0.03] ring-1 ring-white/5 px-3 py-2">
+      <div className="text-ink-400">{label}</div>
+      <div className="font-medium text-emerald-300">{value}</div>
+    </div>
+  );
+}
+
+function ChildPhoto({ photo, size = "md" }: { photo: string | null; size?: "sm" | "md" | "lg" }) {
+  const dim = size === "sm" ? "h-12 w-12" : size === "lg" ? "h-24 w-24" : "h-16 w-16";
+  if (photo) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={photo} alt="Missing child" className={`${dim} shrink-0 rounded-xl object-cover ring-1 ring-white/15`} />
+    );
+  }
+  return (
+    <div className={`${dim} shrink-0 rounded-xl bg-white/5 ring-1 ring-white/10 flex items-center justify-center text-ink-500`}>
+      <UserRound className="h-1/2 w-1/2" />
+    </div>
+  );
+}
+
 function Trigger({
   child,
   onTrigger,
@@ -452,10 +581,13 @@ function Trigger({
           title="Something's wrong. Trigger the alert."
           body="One tap fires a high-priority push to every verified neighbour within 2 km, notifies the nearest police stations, and starts the search-zone assigner."
         />
-        <div className="rounded-2xl ring-1 ring-white/10 bg-white/[0.02] p-5 mb-6">
-          <div className="text-xs uppercase tracking-widest text-ink-400 mb-2">Alerting about</div>
-          <div className="text-xl font-semibold text-white">{child.name}, {child.age}</div>
-          <div className="text-sm text-ink-300 mt-1">Last seen: {child.lastSeenLocation}</div>
+        <div className="rounded-2xl ring-1 ring-white/10 bg-white/[0.02] p-5 mb-6 flex items-center gap-4">
+          <ChildPhoto photo={child.photo} size="lg" />
+          <div>
+            <div className="text-xs uppercase tracking-widest text-ink-400 mb-1">Alerting about</div>
+            <div className="text-xl font-semibold text-white">{child.name}, {child.age}</div>
+            <div className="text-sm text-ink-300 mt-1">Last seen: {child.lastSeenLocation}</div>
+          </div>
         </div>
         <button
           onClick={onTrigger}
@@ -504,8 +636,26 @@ function Broadcast({
       <SectionTitle
         eyebrow="Step 5 · Broadcasting"
         title="The alert is out."
-        body={`Push notifications fired in parallel. Volunteers are seeing ${child.name}'s last-known location on their phones right now.`}
+        body={`Push notifications fired in parallel. Volunteers are seeing ${child.name}'s photo and last-known location on their phones right now.`}
       />
+
+      <div className="mb-5 rounded-2xl ring-1 ring-alert-500/25 bg-alert-500/[0.04] p-4 flex items-center gap-4">
+        <ChildPhoto photo={child.photo} size="lg" />
+        <div className="min-w-0">
+          <div className="text-[10px] uppercase tracking-widest text-alert-300">Missing — active alert</div>
+          <div className="text-xl font-semibold text-white">
+            {child.name}, {child.age}
+          </div>
+          <div className="text-sm text-ink-300 truncate">{child.description}</div>
+          <div className="text-xs text-ink-400 mt-0.5">Last seen: {child.lastSeenLocation}</div>
+        </div>
+        <div className="ml-auto hidden sm:block text-right">
+          <div className="text-[10px] uppercase tracking-widest text-ink-500">What volunteers see</div>
+          <div className="text-xs text-ink-300 mt-1 max-w-[140px]">
+            Photo shown only while the alert is active
+          </div>
+        </div>
+      </div>
 
       <div className="grid md:grid-cols-5 gap-6">
         <div className="md:col-span-3 rounded-2xl ring-1 ring-white/10 bg-white/[0.02] overflow-hidden">
@@ -689,11 +839,13 @@ function Zones({ onNext }: { onNext: () => void }) {
 }
 
 function SightingStep({
+  child,
   sighting,
   setSighting,
   matching,
   onSubmit,
 }: {
+  child: ChildProfile;
   sighting: string;
   setSighting: (s: string) => void;
   matching: boolean;
@@ -729,14 +881,27 @@ function SightingStep({
           </div>
         </div>
 
-        <div className="rounded-2xl ring-1 ring-white/10 bg-white/[0.02] p-5 h-fit">
-          <div className="text-[10px] uppercase tracking-widest text-ink-400 mb-2">Tips that improve matching</div>
-          <ul className="space-y-2 text-sm text-ink-300">
-            <li className="flex gap-2"><span className="text-brand-300">·</span> Mention an approximate age</li>
-            <li className="flex gap-2"><span className="text-brand-300">·</span> Describe specific clothing details</li>
-            <li className="flex gap-2"><span className="text-brand-300">·</span> Note any distinguishing features</li>
-            <li className="flex gap-2"><span className="text-brand-300">·</span> Include the exact street or landmark</li>
-          </ul>
+        <div className="space-y-4 h-fit">
+          <div className="rounded-2xl ring-1 ring-white/10 bg-white/[0.02] p-5">
+            <div className="text-[10px] uppercase tracking-widest text-ink-400 mb-3">Who you&apos;re looking for</div>
+            <div className="flex items-center gap-3">
+              <ChildPhoto photo={child.photo} size="md" />
+              <div className="min-w-0">
+                <div className="font-semibold text-white">{child.name}, {child.age}</div>
+                <div className="text-xs text-ink-300 leading-snug">{child.clothing}</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-2xl ring-1 ring-white/10 bg-white/[0.02] p-5">
+            <div className="text-[10px] uppercase tracking-widest text-ink-400 mb-2">Tips that improve matching</div>
+            <ul className="space-y-2 text-sm text-ink-300">
+              <li className="flex gap-2"><span className="text-brand-300">·</span> Mention an approximate age</li>
+              <li className="flex gap-2"><span className="text-brand-300">·</span> Describe specific clothing details</li>
+              <li className="flex gap-2"><span className="text-brand-300">·</span> Note any distinguishing features</li>
+              <li className="flex gap-2"><span className="text-brand-300">·</span> Include the exact street or landmark</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -744,11 +909,13 @@ function SightingStep({
 }
 
 function Match({
+  child,
   result,
   matching,
   onNext,
   onReplay,
 }: {
+  child: ChildProfile;
   result: AiMatchResult | null;
   matching: boolean;
   onNext: () => void;
@@ -789,6 +956,14 @@ function Match({
         title="Here's what the AI saw."
         body="Confidence is a 0–100 score. Anything ≥ 70 auto-notifies the nearest police stations with the sighting attached."
       />
+
+      <div className="mb-5 flex items-center gap-3 rounded-xl ring-1 ring-white/10 bg-white/[0.02] px-4 py-3">
+        <ChildPhoto photo={child.photo} size="sm" />
+        <div className="text-sm text-ink-300">
+          Sighting compared against{" "}
+          <span className="text-white font-medium">{child.name}</span>&apos;s profile
+        </div>
+      </div>
 
       <div className="grid md:grid-cols-3 gap-5">
         <div className={`rounded-2xl ring-1 ${toneClass} p-6 text-center`}>
