@@ -30,6 +30,14 @@ import {
   SectionTitle,
 } from "./DemoUI";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { DEMO_ZONES } from "@/lib/demoGeo";
+
+// Leaflet touches `window`, so load the map client-side only.
+const ZoneMap = dynamic(() => import("./ZoneMap"), {
+  ssr: false,
+  loading: () => <div className="h-72 w-full animate-pulse bg-ink-900" />,
+});
 
 type Step =
   | "intro"
@@ -76,11 +84,11 @@ export default function DemoFlow() {
     age: 7,
     description: "short curly black hair, brown eyes, small scar on left cheek",
     clothing: "yellow t-shirt with a giraffe, blue denim shorts, white sneakers",
-    lastSeenLocation: "Makindye market, near the fruit stalls",
+    lastSeenLocation: "Ngong Road, near Prestige Plaza, Nairobi",
     photo: null,
   });
   const [sighting, setSighting] = useState(
-    "Just saw a little girl about 7 walking alone near the bus stop on Salaama Road. Yellow shirt with what looked like a giraffe on it, denim shorts. Brown skin, curly hair.",
+    "Just saw a little girl about 7 walking alone near the matatu stage on Ngong Road. Yellow shirt with what looked like a giraffe on it, denim shorts. Brown skin, curly hair.",
   );
   const [matchResult, setMatchResult] = useState<AiMatchResult | null>(null);
   const [matching, setMatching] = useState(false);
@@ -662,8 +670,8 @@ function Broadcast({
       </div>
 
       <div className="grid md:grid-cols-5 gap-6">
-        <div className="md:col-span-3 rounded-2xl ring-1 ring-white/10 bg-white/[0.02] overflow-hidden">
-          <AlertMap child={child} />
+        <div className="md:col-span-3 rounded-2xl ring-1 ring-white/10 bg-white/[0.02] overflow-hidden min-h-[360px]">
+          <ZoneMap showZones heightClass="h-[360px]" />
         </div>
         <div className="md:col-span-2 space-y-3">
           <BroadcastFeed />
@@ -817,23 +825,20 @@ function BroadcastFeed() {
 function Zones({ onNext }: { onNext: () => void }) {
   const [accepted, setAccepted] = useState<string | null>(null);
 
-  const zones = [
-    { id: "A", label: "Salaama Road — north", vols: 3, status: "open" },
-    { id: "B", label: "Market lane & bus stop", vols: 2, status: "open" },
-    { id: "C", label: "Riverside path", vols: 5, status: "open" },
-    { id: "D", label: "School & playground", vols: 1, status: "open" },
-  ];
-
   return (
     <div>
       <SectionTitle
         eyebrow="Step 6 · As a responding neighbour"
         title="Claim a search zone."
-        body="The area around the last-known location is auto-split into zones so coverage is complete and no street gets searched twice. Pick one — the others will be claimed by other volunteers."
+        body="The area around the last-known location is auto-split into zones so coverage is complete and no street gets searched twice. Pick one below — it lights up on the map. The others get claimed by other volunteers."
       />
 
+      <div className="mb-5 rounded-2xl ring-1 ring-white/10 overflow-hidden min-h-[18rem]">
+        <ZoneMap showZones highlightZoneId={accepted} heightClass="h-72" />
+      </div>
+
       <div className="grid md:grid-cols-2 gap-4">
-        {zones.map((z) => {
+        {DEMO_ZONES.map((z) => {
           const claimed = accepted === z.id;
           const otherClaimed = accepted && !claimed;
           return (
@@ -850,10 +855,13 @@ function Zones({ onNext }: { onNext: () => void }) {
               }`}
             >
               <div className="flex items-center justify-between mb-2">
-                <span className={`inline-flex h-8 w-8 items-center justify-center rounded-md font-mono text-sm ${
-                  claimed ? "bg-brand-500 text-white" : "bg-white/5 ring-1 ring-white/10 text-ink-300"
-                }`}>
-                  {z.id}
+                <span className="inline-flex items-center gap-2">
+                  <span className="h-3.5 w-3.5 rounded-sm ring-1 ring-white/20" style={{ backgroundColor: z.color }} />
+                  <span className={`inline-flex h-8 w-8 items-center justify-center rounded-md font-mono text-sm ${
+                    claimed ? "bg-brand-500 text-white" : "bg-white/5 ring-1 ring-white/10 text-ink-300"
+                  }`}>
+                    {z.id}
+                  </span>
                 </span>
                 {claimed && (
                   <span className="inline-flex items-center gap-1 text-xs text-brand-300">
@@ -863,7 +871,7 @@ function Zones({ onNext }: { onNext: () => void }) {
               </div>
               <div className="text-white font-medium">{z.label}</div>
               <div className="mt-1 text-xs text-ink-400">
-                {z.vols} {z.vols === 1 ? "other volunteer" : "other volunteers"} en route
+                {z.volunteers} {z.volunteers === 1 ? "other volunteer" : "other volunteers"} en route
               </div>
             </button>
           );
