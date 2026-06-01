@@ -16,7 +16,7 @@ h1, h2, h3, h4 {
 }
 
 ::selection {
-  background: #3b82f6;
+  background: #12b76a;
   color: white;
 }
 
@@ -28,9 +28,9 @@ h1, h2, h3, h4 {
   background-position: -1px -1px;
 }
 
-/* Trust-blue glow for primary CTAs */
+/* Trust-green glow for primary CTAs */
 .glow {
-  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25), 0 18px 60px -10px rgba(37, 99, 235, 0.45);
+  box-shadow: 0 0 0 1px rgba(18, 183, 106, 0.25), 0 18px 60px -10px rgba(18, 183, 106, 0.45);
 }
 
 /* Emergency-red glow — reserved for the alert trigger */

@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react";
 import Link from "next/link";
-import { Bell, ArrowLeft, Info } from "lucide-react";
+import { Bell, ArrowLeft, PhoneCall } from "lucide-react";
 
 export function DemoChrome({ children, step, total }: { children: ReactNode; step: number; total: number }) {
   return (
@@ -38,11 +38,11 @@ export function DemoChrome({ children, step, total }: { children: ReactNode; ste
       </div>
 
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 pt-3">
-        <div className="flex items-center gap-2 text-[11px] text-caution-200/80 bg-caution-400/[0.06] ring-1 ring-caution-400/20 rounded-lg px-3 py-1.5">
-          <Info className="h-3.5 w-3.5 shrink-0" />
+        <div className="flex items-center gap-2 text-[11px] text-ink-300 bg-alert-400/[0.06] ring-1 ring-alert-400/20 rounded-lg px-3 py-1.5">
+          <PhoneCall className="h-3.5 w-3.5 shrink-0 text-alert-300" />
           <span>
-            Interactive demo — everything here is simulated. No real alerts are sent and no data is
-            stored. In a real emergency, call <span className="font-semibold text-white">999 / 112</span>.
+            Interactive demo. In a real emergency, call{" "}
+            <span className="font-semibold text-white">999 or 112</span>.
           </span>
         </div>
       </div>

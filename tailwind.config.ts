@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
-// Color system per docs/DESIGN_TOKENS — strict semantic ownership:
-//   brand (blue)     = trust / primary actions that are NOT emergencies
+// Color system — strict semantic ownership:
+//   brand (green)    = trust / primary actions that are NOT emergencies
 //   alert (red)      = EMERGENCY ONLY (trigger button, live alert, "very strong match")
 //   safe (green)     = resolution: found / safe / resolved / verified
 //   caution (amber)  = pending / caution / secondary accent
@@ -25,18 +25,18 @@ const config: Config = {
           900: "#141826",
           950: "#0b0e18",
         },
-        // TRUST / PRIMARY — blue. Brand chrome, primary CTAs, links.
+        // TRUST / PRIMARY — green. Brand chrome, primary CTAs, links.
         brand: {
-          50: "#eff6ff",
-          100: "#dbeafe",
-          200: "#bfdbfe",
-          300: "#93c5fd",
-          400: "#60a5fa",
-          500: "#3b82f6",
-          600: "#2563eb",
-          700: "#1d4ed8",
-          800: "#1e40af",
-          900: "#1e3a8a",
+          50: "#ecfdf3",
+          100: "#d1fadf",
+          200: "#a6f4c5",
+          300: "#6ce9a6",
+          400: "#32d583",
+          500: "#12b76a",
+          600: "#039855",
+          700: "#027a48",
+          800: "#05603a",
+          900: "#054f31",
         },
         // EMERGENCY — red. Reserved for active alert states ONLY.
         alert: {

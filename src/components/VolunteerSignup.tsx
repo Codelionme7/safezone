@@ -11,7 +11,7 @@ import {
   Users,
   Clock,
   Lock,
-  Info,
+  PhoneCall,
 } from "lucide-react";
 import { SiteNav, SiteFooter } from "./SiteFrame";
 import Link from "next/link";
@@ -105,12 +105,11 @@ export default function VolunteerSignup() {
                   Takes a minute. You&apos;ll be verified by an NGO coordinator before you can respond
                   to live alerts.
                 </p>
-                <div className="mb-6 flex items-start gap-2.5 rounded-xl ring-1 ring-caution-400/25 bg-caution-400/[0.06] px-4 py-3">
-                  <Info className="h-4 w-4 text-caution-300 mt-0.5 shrink-0" />
-                  <p className="text-xs text-caution-100/90 leading-relaxed">
-                    <span className="font-semibold">Preview only.</span> This form is a demonstration —
-                    nothing is sent or stored, and your phone number never leaves your device. Real
-                    sign-up opens when we partner with an NGO.
+                <div className="mb-6 flex items-start gap-2.5 rounded-xl ring-1 ring-alert-400/25 bg-alert-400/[0.06] px-4 py-3">
+                  <PhoneCall className="h-4 w-4 text-alert-300 mt-0.5 shrink-0" />
+                  <p className="text-xs text-ink-200 leading-relaxed">
+                    <span className="font-semibold text-white">In an emergency, call 999 or 112.</span>{" "}
+                    SafeZone supports the community response — it never replaces the police.
                   </p>
                 </div>
 
@@ -251,7 +250,7 @@ function SuccessState({ name }: { name: string }) {
         phone. Once verified, you&apos;ll receive alerts for the areas you selected.
       </p>
       <p className="mt-3 text-xs text-ink-500">
-        This is an MVP preview — no real application was submitted and no data was stored.
+        In an emergency, always call 999 or 112 — SafeZone never replaces the police.
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
