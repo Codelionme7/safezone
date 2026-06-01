@@ -587,7 +587,7 @@ function Trigger({
         <SectionTitle
           eyebrow="Step 4 · The emergency"
           title="Something's wrong. Trigger the alert."
-          body="One tap fires a high-priority push to every verified neighbour within 2 km, notifies the nearest police stations, and starts the search-zone assigner."
+          body="One tap sends a high-priority push to every verified neighbour within 2 km, starts the search-zone assigner, and prepares a structured summary your coordinator can share with police."
         />
         <div className="rounded-2xl ring-1 ring-white/10 bg-white/[0.02] p-5 mb-4 flex items-center gap-4">
           <ChildPhoto photo={child.photo} size="lg" />
@@ -618,7 +618,7 @@ function Trigger({
           <div className="rounded-xl bg-alert-500/10 ring-1 ring-alert-500/30 px-3 py-3">
             <div className="text-[10px] uppercase tracking-widest text-alert-300">High priority</div>
             <div className="mt-1 text-sm text-white font-medium">
-              You're about to broadcast {child.name}'s details to ~{Math.floor(40 + Math.random() * 30)} verified neighbours and 3 police stations.
+              You&apos;re about to broadcast {child.name}&apos;s details to ~{Math.floor(40 + Math.random() * 30)} verified neighbours, and prepare a summary for your coordinator to share with police.
             </div>
           </div>
           <button
@@ -727,7 +727,7 @@ function AlertMap({
 }
 
 function MapMock({ child }: { child: ChildProfile }) {
-  // Fake "map" rendered with CSS — represents Makindye area
+  // Fake "map" rendered with CSS — fallback only when no location is set
   const dots = useMemo(() => {
     const out: { x: number; y: number; delay: number }[] = [];
     for (let i = 0; i < 18; i++) {
@@ -795,8 +795,8 @@ function BroadcastFeed() {
   const events = [
     { t: "0s", text: "Alert created", icon: <Bell className="h-3.5 w-3.5" /> },
     { t: "2s", text: "Push sent to 67 neighbours", icon: <Radio className="h-3.5 w-3.5" /> },
-    { t: "3s", text: "Makindye Police Station notified", icon: <ShieldCheck className="h-3.5 w-3.5" /> },
-    { t: "4s", text: "Katwe Police Station notified", icon: <ShieldCheck className="h-3.5 w-3.5" /> },
+    { t: "3s", text: "Summary prepared for Kilimani Police Station", icon: <ShieldCheck className="h-3.5 w-3.5" /> },
+    { t: "4s", text: "Coordinator can brief police in one tap", icon: <ShieldCheck className="h-3.5 w-3.5" /> },
     { t: "6s", text: "12 volunteers responded", icon: <Users className="h-3.5 w-3.5" /> },
     { t: "9s", text: "4 search zones generated", icon: <MapPin className="h-3.5 w-3.5" /> },
   ];
@@ -920,7 +920,7 @@ function SightingStep({
             onChange={(e) => setSighting(e.target.value)}
             rows={8}
             className="w-full rounded-2xl ring-1 ring-white/10 bg-white/[0.02] focus:ring-brand-500/40 px-5 py-4 text-white outline-none leading-relaxed"
-            placeholder="A girl about 7 in a yellow shirt, walking alone near the bus stop on Salaama Road..."
+            placeholder="A girl about 7 in a yellow shirt, walking alone near the matatu stage on Ngong Road..."
           />
           <div className="mt-2 text-xs text-ink-500">
             {sighting.length} characters · 10–500 allowed
@@ -962,6 +962,18 @@ function SightingStep({
   );
 }
 
+// AI confidence ramp per docs/DESIGN_TOKENS §4: neutral → amber → orange → red,
+// because a higher match is also more urgent. Never colour-only: number + label + bar.
+function confidenceBand(score: number) {
+  if (score >= 90)
+    return { label: "Very strong — prioritise", text: "text-alert-300", ring: "ring-alert-400/30", bg: "bg-alert-400/10", fill: "bg-alert-400" };
+  if (score >= 70)
+    return { label: "Strong match", text: "text-orange-300", ring: "ring-orange-400/30", bg: "bg-orange-400/10", fill: "bg-orange-400" };
+  if (score >= 40)
+    return { label: "Possible match", text: "text-caution-300", ring: "ring-caution-400/30", bg: "bg-caution-400/10", fill: "bg-caution-400" };
+  return { label: "Low — verify", text: "text-ink-300", ring: "ring-white/10", bg: "bg-white/[0.02]", fill: "bg-ink-400" };
+}
+
 function Match({
   child,
   result,
@@ -987,28 +999,14 @@ function Match({
     );
   }
 
-  const tone =
-    result.score >= 85
-      ? "emerald"
-      : result.score >= 70
-      ? "amber"
-      : result.score >= 40
-      ? "sky"
-      : "ink";
-
-  const toneClass = {
-    emerald: "text-emerald-300 ring-emerald-400/30 bg-emerald-400/10",
-    amber: "text-amber-300 ring-amber-400/30 bg-amber-400/10",
-    sky: "text-sky-300 ring-sky-400/30 bg-sky-400/10",
-    ink: "text-ink-300 ring-white/10 bg-white/[0.02]",
-  }[tone];
+  const band = confidenceBand(result.score);
 
   return (
     <div>
       <SectionTitle
         eyebrow="Step 8 · AI match result"
         title="Here's what the AI saw."
-        body="Confidence is a 0–100 score. Anything ≥ 70 auto-notifies the nearest police stations with the sighting attached."
+        body="Confidence is a 0–100 score shown as a number, a label, and a bar. A strong match is flagged for a verified coordinator to review and, if confirmed, share with police — SafeZone never replaces calling 999 / 112."
       />
 
       <div className="mb-5 flex items-center gap-3 rounded-xl ring-1 ring-white/10 bg-white/[0.02] px-4 py-3">
@@ -1020,15 +1018,20 @@ function Match({
       </div>
 
       <div className="grid md:grid-cols-3 gap-5">
-        <div className={`rounded-2xl ring-1 ${toneClass} p-6 text-center`}>
-          <div className="text-[10px] uppercase tracking-widest opacity-70">Match confidence</div>
-          <div className="mt-2 font-semibold text-5xl tracking-tight tabular-nums">
+        <div className={`rounded-2xl ring-1 ${band.ring} ${band.bg} p-6`}>
+          <div className={`text-[10px] uppercase tracking-widest ${band.text} opacity-80`}>Match confidence</div>
+          <div className={`mt-2 font-semibold text-5xl tracking-tight tabular-nums ${band.text}`}>
             {result.score}
             <span className="text-2xl opacity-60">/100</span>
           </div>
-          <div className="mt-3 text-xs uppercase tracking-widest opacity-80">
-            {result.score >= 85 ? "Strong match" : result.score >= 70 ? "Likely match" : result.score >= 40 ? "Possible" : "Unlikely"}
+          {/* Bar — never rely on colour alone */}
+          <div className="mt-4 h-2 w-full rounded-full bg-white/10 overflow-hidden">
+            <div
+              className={`h-full rounded-full ${band.fill} transition-all`}
+              style={{ width: `${Math.max(4, result.score)}%` }}
+            />
           </div>
+          <div className={`mt-3 text-xs font-medium ${band.text}`}>{band.label}</div>
         </div>
 
         <div className="md:col-span-2 rounded-2xl ring-1 ring-white/10 bg-white/[0.02] p-6">
@@ -1051,16 +1054,19 @@ function Match({
             </div>
           )}
 
-          <div className="mt-5 flex items-center gap-2 text-sm">
+          <div className="mt-5 flex items-start gap-2 text-sm">
             {result.shouldNotifyPolice ? (
               <>
-                <ShieldCheck className="h-4 w-4 text-emerald-300" />
-                <span className="text-emerald-300 font-medium">Auto-notifying nearest police stations.</span>
+                <ShieldCheck className="h-4 w-4 text-caution-300 mt-0.5 shrink-0" />
+                <span className="text-caution-200">
+                  Flagged for a verified coordinator to review and, if confirmed, share with police.
+                  In a real emergency, call <span className="font-semibold text-white">999 / 112</span> now.
+                </span>
               </>
             ) : (
               <>
-                <Bell className="h-4 w-4 text-ink-400" />
-                <span className="text-ink-300">Logged. Not escalating yet — parents and admins notified.</span>
+                <Bell className="h-4 w-4 text-ink-400 mt-0.5 shrink-0" />
+                <span className="text-ink-300">Logged for review. Not escalated — parents and the coordinator are notified.</span>
               </>
             )}
           </div>
@@ -1092,20 +1098,20 @@ function Match({
 function Resolved({ childName, onReset }: { childName: string; onReset: () => void }) {
   return (
     <div className="text-center max-w-2xl mx-auto py-10">
-      <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-400/15 ring-1 ring-emerald-400/40 mb-6">
-        <CheckCircle2 className="h-8 w-8 text-emerald-300" />
+      <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-safe-400/15 ring-1 ring-safe-400/40 mb-6">
+        <CheckCircle2 className="h-8 w-8 text-safe-300" />
       </div>
       <h2 className="text-4xl font-semibold tracking-tight">{childName} is safe.</h2>
       <p className="mt-4 text-ink-300 text-lg leading-relaxed">
-        Officers from Makindye Police Station picked up {childName} near the bus
-        stop after the AI-matched sighting. The alert is closed and every
+        A volunteer&apos;s sighting was confirmed by the coordinator, who briefed Kilimani
+        Police Station — and officers brought {childName} home. The alert is closed and every
         responding volunteer has been notified.
       </p>
 
       <div className="mt-10 grid sm:grid-cols-3 gap-3 text-left">
         <Tile k="Total time" v="14 min" />
         <Tile k="Volunteers active" v="23" />
-        <Tile k="Police stations engaged" v="2" />
+        <Tile k="Zones cleared" v="4 of 4" />
       </div>
 
       <div className="mt-12 rounded-2xl ring-1 ring-white/10 bg-white/[0.02] p-6 text-left">

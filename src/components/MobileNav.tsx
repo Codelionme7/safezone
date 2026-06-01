@@ -7,8 +7,10 @@ import { Menu, X, Bell } from "lucide-react";
 const LINKS = [
   { href: "/#how", label: "How it works" },
   { href: "/volunteer", label: "Volunteer" },
+  { href: "/#trust", label: "Safety" },
   { href: "/privacy", label: "Privacy" },
   { href: "/disclaimer", label: "Disclaimer" },
+  { href: "/safeguarding", label: "Safeguarding" },
 ];
 
 export function MobileNav() {

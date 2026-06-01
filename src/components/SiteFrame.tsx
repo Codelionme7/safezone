@@ -26,6 +26,9 @@ export function SiteNav() {
           Volunteer
         </Link>
         <Link href="/#trust" className="hover:text-white transition-colors">
+          Safety
+        </Link>
+        <Link href="/privacy" className="hover:text-white transition-colors">
           Privacy
         </Link>
       </div>

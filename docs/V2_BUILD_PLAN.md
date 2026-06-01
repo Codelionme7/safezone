@@ -541,3 +541,47 @@ and built client-side (still no backend/keys required).
       verification gate).
 - [ ] **Decisions still needed from you (§8):** collaborator's GitHub
       handle, domain name, first NGO contact, light-mode now or later.
+
+---
+
+## 12. Session 3 log — collaborator checklist + colour system
+
+Driven by two collaborator docs (`SafeZone-action-checklist.md`,
+`SafeZone-color-palette.md`). Full status in `docs/ACTION_CHECKLIST.md`;
+colour system in `docs/DESIGN_TOKENS.md`. All live on the demo.
+
+### ✅ Shipped
+
+- **New colour system (strict semantics).** Blue = trust/primary (was green),
+  red = emergency only, green = found/safe/resolved, amber = caution. Remapped
+  in `tailwind.config.ts`; `brand` flipped green→blue site-wide in one move.
+- **AI score = number + label + bar**, ramping neutral → amber → orange → red
+  (higher match = more urgent). High matches are no longer green.
+- **P0 copy honesty pass:**
+  - Hero reframed from "your whole street shows up" → "coordination beats chaos."
+  - "Report, don't approach" now in the main funnel (hero pill + how-it-works
+    callout), not just a policy page.
+  - Dropped all "automatic police handoff" claims → "prepare a structured
+    summary a coordinator shares with police"; promoted **call 999 / 112**
+    into hero, how-it-works, demo banner, and match result.
+  - NGO/Red Cross lines made clearly aspirational (volunteer + safeguarding).
+  - Volunteer form labelled **preview** — nothing sent/stored.
+- **P1:** single shared header on every page; Privacy link conflict resolved
+  (canonical `/privacy`, section relabelled "Safety"); About section with real
+  contact emails; hero metrics labelled as targets; persistent demo disclaimer
+  on every step.
+- **P2:** removed `maximum-scale` zoom cap.
+- **Consistency:** remaining Ugandan place-names (Makindye/Katwe/Salaama)
+  replaced with Nairobi equivalents (Ngong Road, Kilimani) to match +254.
+
+### 📋 Still open (priority order)
+
+- [ ] **Abuse & threat model doc** (P0 — highest remaining): predators-as-
+      neighbours, custody misuse, false/swatting alarms, vigilante mobs;
+      mitigation each; design schema + permissions from it.
+- [ ] SMS/USSD scope decision; make WhatsApp fallback first-class.
+- [ ] Accessibility pass (axe/Lighthouse), Slow-3G perf pass.
+- [ ] `og:image` + `summary_large_image`; favicon / 404 / deep-link check.
+- [ ] Confirm `safezone.app` domain + email inboxes (external).
+- [ ] Carried over: language switcher, mock face-match step, backend,
+      real notifications, dashboards, light theme.

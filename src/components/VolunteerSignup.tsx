@@ -11,6 +11,7 @@ import {
   Users,
   Clock,
   Lock,
+  Info,
 } from "lucide-react";
 import { SiteNav, SiteFooter } from "./SiteFrame";
 import Link from "next/link";
@@ -100,10 +101,18 @@ export default function VolunteerSignup() {
             ) : (
               <div className="rounded-3xl ring-1 ring-white/10 bg-white/[0.02] p-6 md:p-8">
                 <h2 className="text-2xl font-semibold mb-1">Volunteer sign-up</h2>
-                <p className="text-sm text-ink-400 mb-6">
+                <p className="text-sm text-ink-400 mb-4">
                   Takes a minute. You&apos;ll be verified by an NGO coordinator before you can respond
                   to live alerts.
                 </p>
+                <div className="mb-6 flex items-start gap-2.5 rounded-xl ring-1 ring-caution-400/25 bg-caution-400/[0.06] px-4 py-3">
+                  <Info className="h-4 w-4 text-caution-300 mt-0.5 shrink-0" />
+                  <p className="text-xs text-caution-100/90 leading-relaxed">
+                    <span className="font-semibold">Preview only.</span> This form is a demonstration —
+                    nothing is sent or stored, and your phone number never leaves your device. Real
+                    sign-up opens when we partner with an NGO.
+                  </p>
+                </div>
 
                 <div className="space-y-5">
                   <FormRow label="Full name">
@@ -200,9 +209,11 @@ export default function VolunteerSignup() {
               <div className="text-xs uppercase tracking-widest text-brand-300 mb-2">For NGOs</div>
               <h3 className="text-lg font-semibold text-white">Partner with SafeZone</h3>
               <p className="mt-2 text-sm text-ink-300 leading-relaxed">
-                Already coordinate volunteers — like Kenya Red Cross, activist networks, or children&apos;s
-                homes? SafeZone gives your team a verified, geo-targeted alert system at no cost. You
-                approve your own volunteers; we handle the technology.
+                We want to work with organisations that already coordinate volunteers — such as the
+                Kenya Red Cross, activist networks, or children&apos;s homes. The plan: your team gets a
+                verified, geo-targeted alert system at no cost, you approve your own volunteers, we
+                handle the technology. We&apos;re not partnered with anyone yet — that&apos;s exactly who
+                we&apos;re looking to talk to.
               </p>
               <a
                 href="mailto:partners@safezone.app?subject=NGO%20Partnership%20Interest"

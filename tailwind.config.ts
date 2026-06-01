@@ -1,5 +1,11 @@
 import type { Config } from "tailwindcss";
 
+// Color system per docs/DESIGN_TOKENS — strict semantic ownership:
+//   brand (blue)     = trust / primary actions that are NOT emergencies
+//   alert (red)      = EMERGENCY ONLY (trigger button, live alert, "very strong match")
+//   safe (green)     = resolution: found / safe / resolved / verified
+//   caution (amber)  = pending / caution / secondary accent
+// Site is dark-themed (marketing + demo); values tuned to pop on #0B0E18.
 const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
@@ -19,31 +25,18 @@ const config: Config = {
           900: "#141826",
           950: "#0b0e18",
         },
-        // TRUST / SAFETY — green. Primary brand, CTAs, success.
-        // `brand` is aliased to this so existing brand-* classes become green.
+        // TRUST / PRIMARY — blue. Brand chrome, primary CTAs, links.
         brand: {
-          50: "#ecfdf3",
-          100: "#d1fadf",
-          200: "#a6f4c5",
-          300: "#6ce9a6",
-          400: "#32d583",
-          500: "#12b76a",
-          600: "#039855",
-          700: "#027a48",
-          800: "#05603a",
-          900: "#054f31",
-        },
-        trust: {
-          50: "#ecfdf3",
-          100: "#d1fadf",
-          200: "#a6f4c5",
-          300: "#6ce9a6",
-          400: "#32d583",
-          500: "#12b76a",
-          600: "#039855",
-          700: "#027a48",
-          800: "#05603a",
-          900: "#054f31",
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#3b82f6",
+          600: "#2563eb",
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
         },
         // EMERGENCY — red. Reserved for active alert states ONLY.
         alert: {
@@ -58,22 +51,35 @@ const config: Config = {
           800: "#912018",
           900: "#7a271a",
         },
-        // INSTITUTIONAL — blue. Police, official channels, calm trust.
+        // RESOLUTION — green. Found / safe / resolved / verified.
         safe: {
-          50: "#eff8ff",
-          100: "#d1e9ff",
-          200: "#b2ddff",
-          300: "#84caff",
-          400: "#53b1fd",
-          500: "#2e90fa",
-          600: "#1570ef",
-          700: "#175cd3",
-          800: "#1849a9",
-          900: "#194185",
+          50: "#f0fdf4",
+          100: "#dcfce7",
+          200: "#bbf7d0",
+          300: "#86efac",
+          400: "#4ade80",
+          500: "#22c55e",
+          600: "#16a34a",
+          700: "#15803d",
+          800: "#166534",
+          900: "#14532d",
+        },
+        // CAUTION — amber. Pending / caution / secondary accent.
+        caution: {
+          50: "#fffbeb",
+          100: "#fef3c7",
+          200: "#fde68a",
+          300: "#fcd34d",
+          400: "#fbbf24",
+          500: "#f59e0b",
+          600: "#d97706",
+          700: "#b45309",
+          800: "#92400e",
+          900: "#78350f",
         },
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "sans-serif"],
         display: ["var(--font-manrope)", "var(--font-inter)", "ui-sans-serif", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },

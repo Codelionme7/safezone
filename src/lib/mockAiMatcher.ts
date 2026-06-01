@@ -63,14 +63,14 @@ export function mockMatch(profile: ChildProfile, sighting: string): AiMatchResul
   const score = Math.min(98, Math.max(8, overlapScore + ageBonus));
 
   let reasoning = "";
-  if (score >= 85) {
-    reasoning = `Strong match — ${matches.length} specific details from the profile appear in the sighting, including age and clothing cues.`;
+  if (score >= 90) {
+    reasoning = `Very strong match — ${matches.length} specific details from the profile appear in the sighting, including age and clothing cues. Flag for a coordinator to review and escalate.`;
   } else if (score >= 70) {
-    reasoning = `Likely match — multiple distinctive details overlap. Worth dispatching police.`;
+    reasoning = `Strong match — multiple distinctive details overlap. Worth a coordinator's attention.`;
   } else if (score >= 40) {
-    reasoning = `Possible match — some details overlap but key identifiers are missing or conflicting.`;
+    reasoning = `Possible match — some details overlap but key identifiers are missing or conflicting. Verify before acting.`;
   } else {
-    reasoning = `Unlikely match — few overlapping details. Logged for review but not escalating.`;
+    reasoning = `Low — few overlapping details. Logged for review but not escalating.`;
   }
 
   return {

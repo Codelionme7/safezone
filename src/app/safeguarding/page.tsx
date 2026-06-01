@@ -46,10 +46,11 @@ export default function SafeguardingPage() {
 
       <Section heading="Working with NGOs">
         <p>
-          We partner with established organisations — such as the Kenya Red Cross, activist networks,
-          and children&apos;s homes — precisely because they already practise safeguarding. NGO partners
-          approve their own volunteers, giving every alert a layer of human trust before it reaches
-          the network.
+          Our goal is to work with established organisations we admire — such as the Kenya Red Cross,
+          activist networks, and children&apos;s homes — precisely because they already practise
+          safeguarding. These partnerships are aspirational, not yet in place. The intended model:
+          NGO partners approve their own volunteers, giving every alert a layer of human trust before
+          it reaches the network.
         </p>
       </Section>
     </LegalShell>

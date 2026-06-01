@@ -5,7 +5,6 @@ import "./globals.css";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5,
   themeColor: "#0b0e18",
 };
 
@@ -14,13 +13,13 @@ const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope", displa
 const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "SafeZone — Find missing children fast with community alerts",
+  title: "SafeZone — Coordinated community response when a child goes missing",
   description:
-    "Community-powered child safety. Instant geo-fenced alerts, coordinated volunteer search zones, AI-matched sightings, and automatic police notification. Built on free-tier services.",
+    "Community-powered child safety. Verified neighbour alerts, coordinated search zones, and AI-triaged sightings that help a coordinator brief the police. You report — police lead the recovery. An MVP preview.",
   openGraph: {
-    title: "SafeZone — Find missing children fast",
+    title: "SafeZone — Coordinated community response when a child goes missing",
     description:
-      "Instant community alerts, coordinated search zones, AI-matched sightings, automatic police notification.",
+      "Verified neighbour alerts, coordinated search zones, AI-triaged sightings. Report, don't approach — police lead the recovery.",
     type: "website",
   },
 };

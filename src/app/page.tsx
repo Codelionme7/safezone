@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  Bell,
   MapPin,
   ShieldCheck,
   Users,
@@ -10,9 +9,9 @@ import {
   Lock,
   Radio,
   Map as MapIcon,
+  ShieldAlert,
 } from "lucide-react";
-import { SiteFooter } from "@/components/SiteFrame";
-import { MobileNav } from "@/components/MobileNav";
+import { SiteNav, SiteFooter } from "@/components/SiteFrame";
 
 export default function Home() {
   return (
@@ -20,7 +19,7 @@ export default function Home() {
       <div className="absolute inset-0 grid-bg opacity-50 pointer-events-none" />
       <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[480px] w-[900px] rounded-full bg-brand-600/20 blur-[160px] pointer-events-none" />
 
-      <Nav />
+      <SiteNav />
 
       <section className="relative max-w-6xl mx-auto px-6 pt-14 sm:pt-20 pb-20 sm:pb-28">
         <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-brand-300 mb-6">
@@ -28,19 +27,27 @@ export default function Home() {
           MVP preview · feedback wanted
         </div>
         <h1 className="text-4xl sm:text-5xl md:text-7xl font-semibold tracking-tight leading-[1.08] sm:leading-[1.05] max-w-4xl text-balance">
-          When seconds matter, your <span className="text-brand-400">whole street</span> shows up.
+          When a child goes missing, <span className="text-brand-400">coordination</span> beats chaos.
         </h1>
         <p className="mt-6 text-base sm:text-lg md:text-xl text-ink-300 max-w-2xl leading-relaxed">
-          SafeZone turns a missing-child crisis into a coordinated community
-          response. Instant geo-fenced alerts. Volunteers assigned to non-overlapping
-          search zones. AI-matched sightings sent straight to the nearest police
-          station.
+          SafeZone helps a neighbourhood respond calmly in the first hour: verified
+          neighbours get a precise alert, search zones prevent overlap, and AI helps
+          triage sightings. You report what you see — police lead the recovery.
         </p>
+
+        <div className="mt-6 inline-flex items-start gap-2.5 rounded-xl ring-1 ring-caution-400/30 bg-caution-400/[0.06] px-4 py-3 max-w-xl">
+          <ShieldAlert className="h-4 w-4 text-caution-300 mt-0.5 shrink-0" />
+          <p className="text-sm text-caution-100/90 leading-relaxed">
+            <span className="font-semibold">Report, don&apos;t approach.</span> Volunteers share
+            sightings and locations — never confront a child or suspect. Physical recovery is always
+            the job of the police. In an emergency, call <span className="font-semibold text-white">999 / 112</span>.
+          </p>
+        </div>
 
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
             href="/demo"
-            className="group inline-flex items-center gap-2 rounded-xl bg-brand-500 hover:bg-brand-400 transition-colors px-6 py-3.5 font-medium text-white glow"
+            className="group inline-flex items-center gap-2 rounded-xl bg-brand-600 hover:bg-brand-500 transition-colors px-6 py-3.5 font-medium text-white glow"
           >
             Try the interactive demo
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -59,6 +66,9 @@ export default function Home() {
           <Stat value="AI 0–100" label="Match confidence" />
           <Stat value="$0" label="To run the MVP" />
         </div>
+        <p className="mt-3 text-xs text-ink-500">
+          Figures above are design targets for the MVP — not yet independently measured.
+        </p>
       </section>
 
       <section id="problem" className="relative max-w-6xl mx-auto px-6 py-20 border-t border-white/5">
@@ -78,9 +88,9 @@ export default function Home() {
             <p>
               SafeZone closes that gap. The moment a parent triggers an alert,
               verified neighbours within range get a push notification, the search
-              area is split into assigned zones so no street gets searched twice, and
-              the nearest police stations receive a structured case file — not a
-              panicked phone call.
+              area is split into assigned zones so no street gets searched twice, and a
+              coordinator can brief the police with a clear, structured summary instead
+              of a panicked phone call.
             </p>
           </div>
         </div>
@@ -114,9 +124,19 @@ export default function Home() {
           <Step
             n="04"
             icon={<ShieldCheck className="h-5 w-5" />}
-            title="Automatic police handoff"
-            body="High-confidence matches are pushed to the nearest stations via SMS / WhatsApp with structured case data — every notification logged."
+            title="Structured handoff to police"
+            body="When a sighting is strong, SafeZone prepares a clear summary a verified coordinator can share with police. It never replaces calling 999 / 112 — it makes that call faster and clearer."
           />
+        </div>
+
+        <div className="mt-6 flex items-start gap-2.5 rounded-2xl ring-1 ring-caution-400/25 bg-caution-400/[0.05] px-5 py-4">
+          <ShieldAlert className="h-5 w-5 text-caution-300 mt-0.5 shrink-0" />
+          <p className="text-sm text-ink-200 leading-relaxed">
+            <span className="font-semibold text-white">Report, don&apos;t approach.</span> Volunteers
+            report sightings and share locations only — they never confront a child or a suspected
+            person. Physical recovery is always the job of the police. SafeZone is a coordination
+            tool, not a replacement for emergency services.
+          </p>
         </div>
       </section>
 
@@ -129,8 +149,8 @@ export default function Home() {
         <div className="grid md:grid-cols-3 gap-5">
           <Trust
             icon={<Lock className="h-5 w-5" />}
-            title="No photos on the server"
-            body="Only a perceptual hash. The original photo lives on the parent's device and is shown to police on request only."
+            title="Photos shown only during an alert"
+            body="A child's photo is visible to verified volunteers only while an alert is active, then removed when the child is found. We never make it public."
           />
           <Trust
             icon={<Users className="h-5 w-5" />}
@@ -179,6 +199,33 @@ export default function Home() {
         </div>
       </section>
 
+      <section id="about" className="relative max-w-6xl mx-auto px-6 py-20 border-t border-white/5">
+        <div className="grid md:grid-cols-2 gap-12 items-start">
+          <div>
+            <p className="text-xs uppercase tracking-widest text-brand-300 mb-4">About</p>
+            <h2 className="text-3xl md:text-4xl font-semibold leading-tight">
+              A Kenyan-built tool for the first hour.
+            </h2>
+          </div>
+          <div className="space-y-5 text-ink-300 leading-relaxed">
+            <p>
+              SafeZone is an independent project started in Kenya, built around one belief: when a
+              child goes missing, a calm, coordinated neighbourhood — working with the police, not
+              instead of them — saves time that matters. We&apos;re building in the open and actively
+              looking for feedback, partners, and people who care about child safety.
+            </p>
+            <p>
+              This is an early MVP preview. It is not yet affiliated with any NGO or government body.
+              Reach us at{" "}
+              <a href="mailto:hello@safezone.app" className="text-brand-300 underline underline-offset-2">
+                hello@safezone.app
+              </a>{" "}
+              — for partnerships, <a href="mailto:partners@safezone.app" className="text-brand-300 underline underline-offset-2">partners@safezone.app</a>.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="relative max-w-6xl mx-auto px-6 py-24 border-t border-white/5">
         <div className="text-center max-w-2xl mx-auto">
           <h2 className="text-3xl md:text-5xl font-semibold leading-tight">
@@ -211,51 +258,6 @@ export default function Home() {
   );
 }
 
-function Nav() {
-  return (
-    <nav className="relative z-10 max-w-6xl mx-auto px-6 pt-6 flex items-center justify-between">
-      <Logo />
-      <div className="hidden md:flex items-center gap-7 text-sm text-ink-300">
-        <a href="#problem" className="hover:text-white transition-colors">
-          Problem
-        </a>
-        <a href="#how" className="hover:text-white transition-colors">
-          How it works
-        </a>
-        <Link href="/volunteer" className="hover:text-white transition-colors">
-          Volunteer
-        </Link>
-        <a href="#trust" className="hover:text-white transition-colors">
-          Privacy
-        </a>
-        <a href="#stack" className="hover:text-white transition-colors">
-          Stack
-        </a>
-      </div>
-      <div className="flex items-center gap-2">
-        <Link
-          href="/demo"
-          className="hidden md:inline-flex text-sm rounded-lg bg-white/5 ring-1 ring-white/10 hover:bg-white/10 px-3.5 py-2 transition-colors"
-        >
-          Try demo →
-        </Link>
-        <MobileNav />
-      </div>
-    </nav>
-  );
-}
-
-function Logo() {
-  return (
-    <Link href="/" className="inline-flex items-center gap-2">
-      <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-lg bg-brand-500/15 ring-1 ring-brand-500/40">
-        <Bell className="h-4 w-4 text-brand-300" />
-        <span className="absolute inset-0 rounded-lg ring-2 ring-brand-500/30 animate-pulse-ring" />
-      </span>
-      <span className="font-semibold tracking-tight">SafeZone</span>
-    </Link>
-  );
-}
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
